@@ -115,4 +115,6 @@ public class Account {
                 ", password='" + password + '\'' +
                 '}';
     }
+    public void setAccountId(Object generateAccountId) {
+    }
 }
