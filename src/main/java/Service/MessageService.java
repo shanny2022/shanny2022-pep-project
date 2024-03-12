@@ -227,7 +227,7 @@ public class MessageService {
         throw new UnsupportedOperationException("Unimplemented method 'getMessagesByAccountId'");
     }
 
-    public Message updateMessageTextById(String messageId, String newText) {
+    public Message updateMessageTextById(int messageId, String newText) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateMessageTextById'");
     }
@@ -247,5 +247,9 @@ public class MessageService {
     }
 
     public void updateMessage(MessageService messageService) {
+    }
+
+    public Message deleteMessageById(int messageId) {
+        return null;
     }
 }

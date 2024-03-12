@@ -35,4 +35,7 @@ public class AccountService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findByUsername'");
     }
+
+    public void login(Account account) {
+    }
 }
