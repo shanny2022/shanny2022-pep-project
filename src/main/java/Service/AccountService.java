@@ -6,7 +6,7 @@ public class AccountService {
     public AccountService() {
     }
 
-    public Account register(Account account) {
+    public static Account register(Account account) {
         // Implement the method here
         return null; // Placeholder return statement
     }
@@ -36,6 +36,7 @@ public class AccountService {
         throw new UnsupportedOperationException("Unimplemented method 'findByUsername'");
     }
 
-    public void login(Account account) {
+    public static boolean login(Account account) {
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package Util;
 
 import Controller.SocialMediaController;
+import Service.MessageService;
 import io.javalin.Javalin;
 
 /**
@@ -10,7 +11,8 @@ import io.javalin.Javalin;
  */
 public class Main {
     public static void main(String[] args) {
-        SocialMediaController controller = new SocialMediaController(null);
+        MessageService messageService = new MessageService();
+        SocialMediaController controller = new SocialMediaController(messageService);
         Javalin app = controller.startAPI();
         app.start(8080);
     }
