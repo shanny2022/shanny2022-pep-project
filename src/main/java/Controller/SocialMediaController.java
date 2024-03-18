@@ -1,200 +1,232 @@
 package Controller;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import Model.Account;
 import Model.Message;
-import Service.AccountService;
-import Service.MessageService;
+import Service.SocialMediaService;
+
+import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+/**
+ * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
+ * found in readme.md as well as the test cases. You should
+ * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
+ * Controller uses Rest related verbs to describe method behavior.
+ */
 public class SocialMediaController {
-    private AccountService accountService;
-    private MessageService messageService;
 
-    public SocialMediaController(Javalin app) {
-        this.accountService = new AccountService();
-        this.messageService = new MessageService();
+    //Class field for service object for handler functions to reference to
+    private SocialMediaService socialMediaService = new SocialMediaService();
 
-        app.get("/accounts", this::getAllAccounts);
-        app.get("/accounts/{id}", this::getAccount);
-        app.post("/accounts", this::createAccount);
-        app.put("/accounts/{id}", this::updateAccount);
-        app.delete("/accounts/{id}", this::deleteAccount);
-        app.get("/messages/{id}", this::getMessageById);
-        app.get("/messages", this::getAllMessages);
-        app.post("/messages", this::createMessage);
-        app.put("/messages/{id}", this::updateMessage);
-        app.delete("/messages/{id}", this::deleteMessage);
-        app.get("/accounts/{id}/messages", this::getAllMessagesForUser);
-        app.post("/register", this::registerAccount);
-        app.patch("/messages/{id}", this::updateMessage);
-    }
-
-    public SocialMediaController(MessageService messageService) {
-        this.messageService = messageService;
-    }
-
-    public SocialMediaController() {
-        this.accountService = new AccountService();
-        this.messageService = new MessageService();
-    }
-
-    private void getAllAccounts(Context ctx) {
-        List<Account> accounts = accountService.getAllAccounts();
-        ctx.json(accounts);
-    }
-
-    private void registerAccount(Context ctx) {
-        Account account = ctx.bodyAsClass(Account.class);
-        if (account.getPassword().length() < 4) {
-            ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Password length should be at least 4 characters");
-        } else {
-            accountService.createAccount(account);
-            ctx.status(HttpStatus.CREATED.getStatusCode());
-        }
-    }
-
-    private void getAccount(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            Optional<Account> account = accountService.getAccount(id);
-            ctx.json(account.get());
-        } catch (NoSuchElementException e) {
-            ctx.status(HttpStatus.NOT_FOUND.getStatusCode());
-        }
-    }
-
-    private void createAccount(Context ctx) {
-        Account account = ctx.bodyAsClass(Account.class);
-        accountService.createAccount(account);
-        ctx.status(HttpStatus.CREATED.getStatusCode());
-    }
-
-    private void updateAccount(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            Account account = ctx.bodyAsClass(Account.class);
-            accountService.updateAccount(id, account);
-            ctx.status(HttpStatus.NO_CONTENT.getStatusCode());
-        } catch (NoSuchElementException e) {
-            ctx.status(HttpStatus.NOT_FOUND.getStatusCode());
-        }
-    }
-
-    private void deleteAccount(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            accountService.deleteAccount(id);
-            ctx.status(HttpStatus.NO_CONTENT.getStatusCode());
-        } catch (NoSuchElementException e) {
-            ctx.status(HttpStatus.NOT_FOUND.getStatusCode());
-        }
-    }
-
-    private void getAllMessages(Context ctx) {
-        try {
-            List<Message> messages = messageService.getAllMessages();
-            ctx.status(HttpStatus.OK.getStatusCode()).json(messages);
-        } catch (Exception e) {
-            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).result("An error occurred while retrieving messages: " + e.getMessage());
-        }
-    }
-
-    private void getAllMessagesForUser(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            List<Message> messages = messageService.getAllMessagesForUser(id);
-            ctx.status(HttpStatus.OK.getStatusCode()).json(messages);
-        } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Invalid ID format: " + ctx.pathParam("id"));
-        } catch (NoSuchElementException e) {
-            ctx.status(HttpStatus.NOT_FOUND.getStatusCode());
-        }
-    }
-
-    private void getMessageById(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            Message message = messageService.getMessageById(id);
-            if (message != null) {
-                ctx.status(HttpStatus.OK.getStatusCode()).json(message);
-            } else {
-                ctx.status(HttpStatus.NOT_FOUND.getStatusCode());
-            }
-        } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Invalid ID format: " + ctx.pathParam("id"));
-        } catch (Exception e) {
-            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).result("An error occurred while retrieving the message: " + e.getMessage());
-        }
-    }
-
-    private void createMessage(Context ctx) {
-        Message message = ctx.bodyAsClass(Message.class);
-        if (message.getText() == null || message.getText().length() > 255) {
-            ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Message text should not be null and should be less than 256 characters");
-        } else {
-            Optional<Account> account = accountService.getAccount(message.getUserId());
-            if (!account.isPresent()) {
-                ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("User ID does not exist");
-            } else {
-                messageService.createMessage(message, account);
-                ctx.status(HttpStatus.CREATED.getStatusCode());
-            }
-        }
-    }
-
-    public List<Message> getMessages() {
-        return messageService.getAllMessages();
-    }
-
-    private void updateMessage(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            Message updatedMessage = ctx.bodyAsClass(Message.class);
-            if (updatedMessage.getText() == null || updatedMessage.getText().isEmpty()) {
-                ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Message text cannot be empty");
-                return;
-            }
-            if (updatedMessage.getText().length() > 200) {
-                ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Message text is too long");
-                return;
-            }
-            Message message = messageService.updateMessage(id, updatedMessage);
-            if (message != null) {
-                ctx.status(HttpStatus.OK.getStatusCode()).json(message);
-            } else {
-                ctx.status(HttpStatus.NOT_FOUND.getStatusCode());
-            }
-        } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Invalid ID format: " + ctx.pathParam("id"));
-        } catch (Exception e) {
-            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).result("An error occurred while updating the message: " + e.getMessage());
-        }
-    }
-
-    private void deleteMessage(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            messageService.deleteMessage(id);
-            ctx.status(HttpStatus.NO_CONTENT.getStatusCode());
-        } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST.getStatusCode()).result("Invalid ID format: " + ctx.pathParam("id"));
-        } catch (NoSuchElementException e) {
-            ctx.status(HttpStatus.NOT_FOUND.getStatusCode());
-        }
-    }
-
-    public static void main(String[] args) {
-        Javalin app = Javalin.create().start(7000);
-        new SocialMediaController(app);
-    }
-
+    /**
+     * Creates an instance of a Javalin Jettyserver.
+     * @return a Javalin app object which defines the behavior of the Javalin controller.
+     */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        new SocialMediaController(app);
+        app.post("/register", this::registerHandler);
+        app.post("/login", this::loginHandler);
+        app.post("/messages", this::postMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
+        app.get("/messages/{message_id}", this::getMessageHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageHandler);
+        app.patch("/messages/{message_id}", this::patchMessageHandler);
+        app.get("/accounts/{account_id}/messages", this::getMessagesByIdHandler);
         return app;
+    }
+
+    /**
+     * Uses Object mapper to turn json request body into an account object
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     * @throws JsonProcessingException
+     * @throws JsonMappingException
+     */
+    private void registerHandler(Context context) throws JsonMappingException, JsonProcessingException {
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Converts body json to account object
+        Account account = mapper.readValue(context.body(), Account.class);
+
+        //Sends body json to service to register the account
+        Account addedAccount = socialMediaService.register(account);
+
+        //Checks if null for when an error occurred
+        if (addedAccount == null) {
+            context.status(400); //General Client Error
+        } else {
+            context.json(mapper.writeValueAsString(addedAccount));
+        }
+    }
+    /**
+     *
+     * @param context
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     */
+    private void loginHandler(Context context) throws JsonMappingException, JsonProcessingException {
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Converts body json to account object
+        Account account = mapper.readValue(context.body(), Account.class);
+        //Sends body json to service to validate the login
+        Account addedAccount = socialMediaService.login(account);
+
+        //Checks if null for when an error occurred
+        if (addedAccount == null) {
+            context.status(401); //Unauthorized: Request not valid
+        } else {
+            context.json(mapper.writeValueAsString(addedAccount));
+        }
+    }
+    /**
+     *
+     * @param context
+     * @throws JsonProcessingException
+     */
+    private void getMessageHandler(Context context) throws JsonProcessingException{
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Gets id value from endpoint url
+        int message_id = Integer.parseInt(context.pathParam("message_id"));
+
+        //Gets message object from service read message method
+        Message message = socialMediaService.readMessage(message_id);
+
+        //If message null still return 200 but without an object in response body.
+        if (message == null) {
+            context.status(200); //Default successful response
+        } else {
+            context.json(mapper.writeValueAsString(message));
+        }
+    }
+    /**
+     *
+     * @param context
+     * @throws JsonProcessingException
+     */
+    private void getAllMessagesHandler(Context context) throws JsonProcessingException{
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Returns List of Messages or null on error from service
+        List<Message> messages = socialMediaService.readAllMessages();
+
+        //If null return 200 without a response body
+        if (messages == null) {
+            context.status(200); //Default successful response
+        } else {
+            //return all messages
+            context.json(mapper.writeValueAsString(messages));
+        }
+    }
+    /**
+     *
+     * @param context
+     * @throws JsonProcessingException
+     */
+    private void getMessagesByIdHandler(Context context) throws JsonProcessingException{
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Gets account id from url path
+        int account_id = Integer.parseInt(context.pathParam("account_id"));
+
+        //Creates a list of messages from service's read all messages or null on errors
+        List<Message> messages = socialMediaService.readAllMessagesById(account_id);
+
+        //If null then an error occurred otherwise return object
+        if (messages == null) {
+            context.status(200); //Deafult successful response
+        } else {
+            context.json(mapper.writeValueAsString(messages));
+        }
+    }
+    /**
+     *
+     * @param context
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     */
+    private void postMessageHandler(Context context) throws JsonMappingException, JsonProcessingException{
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Converts body json to message object
+        Message message = mapper.readValue(context.body(), Message.class);
+
+        //Set message to response from service which is the new value or null on error
+        message = socialMediaService.createMessage(message);
+
+        //If null then error occurred, otherwise return object
+        if (message == null) {
+            context.status(400); //General Client Error
+        } else {
+            context.status(200).json(mapper.writeValueAsString(message));
+        }
+    }
+    /**
+     *
+     * @param context
+     * @throws JsonProcessingException
+     */
+    private void patchMessageHandler(Context context) throws JsonProcessingException{
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Gets id value from endpoint url
+        int message_id = Integer.parseInt(context.pathParam("message_id"));
+
+        //Converts body json to message object and sets the object to have the id from path
+        Message message = mapper.readValue(context.body(), Message.class);
+        message.setMessage_id(message_id);
+
+        //Returns message or null to new message object
+        message = socialMediaService.updateMessage(message);
+
+        //Using a new object
+        if (message == null) {
+            context.status(400); //General Client Error
+        } else {
+            context.json(mapper.writeValueAsString(message));
+        }
+    }
+
+    /**
+     *
+     * @param context
+     * @throws JsonProcessingException
+     */
+    private void deleteMessageHandler(Context context) throws JsonProcessingException{
+
+        //Uses Jackson object mapper to serialize objects
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        //Get message id from url path
+        int message_id = Integer.parseInt(context.pathParam("message_id"));
+
+        //sets message object to deleted message or null on failure
+        Message message = socialMediaService.readMessage(message_id);
+
+        //If null return empty body with default response
+        if (message == null) {
+            context.status(200); //Deafult successful response
+        } else {
+            context.json(mapper.writeValueAsString(message));
+        }
     }
 }
