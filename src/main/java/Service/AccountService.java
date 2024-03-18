@@ -1,5 +1,8 @@
 package Service;
 
+import java.util.List;
+import java.util.Optional;
+
 import Model.Account;
 
 public class AccountService {
@@ -32,11 +35,24 @@ public class AccountService {
 	}
 
     public Account findByUsername(String username) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findByUsername'");
     }
 
     public static boolean login(Account account) {
         return false;
+    }
+
+    public List<Account> getAllAccounts() {
+        return null;
+    }
+
+    public Optional<Account> getAccount(int id) {
+        return null;
+    }
+
+    public void updateAccount(int id, Account account) {
+    }
+
+    public void deleteAccount(int id) {
     }
 }

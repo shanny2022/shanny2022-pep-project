@@ -141,4 +141,8 @@ public class MessageDao implements BaseDao<Message> {
         long timePostedEpoch = rs.getLong("time_posted_epoch");
         return new Message(messageId, postedBy, messageText, timePostedEpoch);
     }
+
+    public Message getMessage(int id) {
+        return null;
+    }
 }

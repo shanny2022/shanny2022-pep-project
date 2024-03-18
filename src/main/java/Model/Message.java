@@ -143,4 +143,7 @@ public class Message {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getText'");
     }
+    public int getUserId() {
+        return 0;
+    }
 }
