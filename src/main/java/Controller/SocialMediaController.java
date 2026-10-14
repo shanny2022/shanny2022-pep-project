@@ -191,6 +191,10 @@ public class SocialMediaController {
 
         //Converts body json to message object and sets the object to have the id from path
         Message message = mapper.readValue(context.body(), Message.class);
+        if (message == null) {
+            context.status(400);
+            return;
+        }
         message.setMessage_id(message_id);
 
         //Returns message or null to new message object
