@@ -76,7 +76,8 @@ public class SocialMediaService {
         //Try catch block for catching unexpected errors and returning null
         try {
             //Checks message requirements and if it fails returns null
-            if(message.getMessage_text().length() > 254 || message.getMessage_text().equals("")) {
+            if(message == null || message.getMessage_text() == null
+                    || message.getMessage_text().length() > 254 || message.getMessage_text().isEmpty()) {
                 return null;
             }
             else {
@@ -137,7 +138,8 @@ public class SocialMediaService {
     public Message updateMessage(Message message){
         try {
             //Checks message requirements and if it fails returns null
-            if(message.getMessage_text().length() > 254 || message.getMessage_text().equals("")) {
+            if(message == null || message.getMessage_text() == null
+                    || message.getMessage_text().length() > 254 || message.getMessage_text().isEmpty()) {
                 return null;
             }
             else {
