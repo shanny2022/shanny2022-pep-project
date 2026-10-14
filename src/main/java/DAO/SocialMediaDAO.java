@@ -108,7 +108,6 @@ public class SocialMediaDAO {
             ps.setInt(1, account.getAccount_id());
             int deleted = ps.executeUpdate();
             if(deleted > 0){
-                System.out.println("Account Deleted");
                 return account;
             }
 
@@ -228,7 +227,6 @@ public class SocialMediaDAO {
                     rs.getLong("time_posted_epoch"));
                 messages.add(mesage);
             }
-            System.out.println(messages.toString());
             return messages;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -257,7 +255,6 @@ public class SocialMediaDAO {
 
             //If int returned is more than 0 then a message was deleted
             if(deleted > 0){
-                System.out.println("Message Deleted");
                 return message;
             }
 
