@@ -29,7 +29,7 @@ I check whether the submitted username and password match an existing account.
 A successful login returns the account as JSON, including its account_id, with 200 OK. Incorrect credentials return 401 Unauthorized.
 3. Create a Message
 POST /messages
-I validate that message_text is not blank, contains no more than 255 characters, and that posted_by identifies an existing account.
+I validate that message_text is not blank, contains no more than 254 characters, and that posted_by identifies an existing account.
 A valid message is saved and returned as JSON with its generated message_id and 200 OK. Invalid requests return 400 Bad Request.
 4. Retrieve All Messages
 GET /messages
@@ -41,3 +41,6 @@ I return the matching message as JSON with 200 OK. If the message does not exist
 DELETE /messages/{message_id}
 I remove the matching message from the database and return the deleted message as JSON with 200 OK.
 If the message does not exist, I return 200 OK with an empty response body. Repeating the request leaves the message deleted.
+
+
+For setup commands, validation details, and the full endpoint reference, see [the development guide](docs/DEVELOPMENT.md).
