@@ -27,4 +27,9 @@ public class ServiceValidationTest {
         when(dao.insertAccount(account)).thenReturn(account);
         assertSame(account, service.register(account));
     }
+    @Test public void missingLoginFields() {
+        assertNull(service.login(new Account()));
+        assertNull(service.login(null));
+        verifyNoInteractions(dao);
+    }
 }
