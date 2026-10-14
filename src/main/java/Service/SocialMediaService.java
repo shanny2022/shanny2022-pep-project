@@ -35,7 +35,8 @@ public class SocialMediaService {
         try {
 
             //Checks message requirements and if it fails returns null
-            if(account.getUsername().equals("") || account.getPassword().length() < 4) {
+            if(account == null || account.getUsername() == null || account.getPassword() == null
+                    || account.getUsername().isEmpty() || account.getPassword().length() < 4) {
                 return null;
             }
             //Otherwise return registered account
