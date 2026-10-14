@@ -46,4 +46,9 @@ public class ServiceValidationTest {
         when(dao.insertMessage(message)).thenReturn(message);
         assertSame(message, service.createMessage(message));
     }
+    @Test public void invalidPatch() {
+        assertNull(service.updateMessage(new Message()));
+        assertNull(service.updateMessage(null));
+        verifyNoInteractions(dao);
+    }
 }
