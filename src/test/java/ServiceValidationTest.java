@@ -18,4 +18,8 @@ public class ServiceValidationTest {
         assertNull(service.register(new Account()));
         verifyNoInteractions(dao);
     }
+    @Test public void shortPassword() {
+        assertNull(service.register(new Account("user", "abc")));
+        verifyNoInteractions(dao);
+    }
 }
