@@ -66,6 +66,10 @@ public class DeleteMessageByMessageIdTest {
         Message expectedResult = new Message(1, 1, "test message 1", 1669947792);
         Message actualResult = objectMapper.readValue(response.body().toString(), Message.class);
         Assert.assertEquals(expectedResult, actualResult);
+        HttpResponse<String> secondDelete = webClient.send(request, HttpResponse.BodyHandlers.ofString());
+        Assert.assertEquals(200, secondDelete.statusCode());
+        Assert.assertTrue(secondDelete.body().isEmpty());
+        Assert.assertNull(new DAO.SocialMediaDAO().selectMessage(1));
     }
 
     /**
