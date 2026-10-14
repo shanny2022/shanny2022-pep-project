@@ -37,4 +37,8 @@ public class ServiceValidationTest {
         assertNull(service.createMessage(null));
         verifyNoInteractions(dao);
     }
+    @Test public void tooLongMessage() {
+        assertNull(service.createMessage(new Message(1, "x".repeat(255), 1L)));
+        verifyNoInteractions(dao);
+    }
 }
