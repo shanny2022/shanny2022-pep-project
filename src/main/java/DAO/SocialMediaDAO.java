@@ -29,10 +29,10 @@ public class SocialMediaDAO {
      */
     public Account selectAccount(Account account) {
         //Catches unexpected errors and returns null
-            //sql command string
-            String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
+        //sql command string
+        String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
 
-            //turns string into prepared statement
+        //turns string into prepared statement
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
 
             //Adds values for ? fields
@@ -66,10 +66,10 @@ public class SocialMediaDAO {
     public Account insertAccount(Account account) {
 
         //Catches unexpected errors and returns null
-            //Sql string
-            String sql = "INSERT INTO account (username, password) VALUES (?, ?);";
+        //Sql string
+        String sql = "INSERT INTO account (username, password) VALUES (?, ?);";
 
-            //Turns into prepared statement
+        //Turns into prepared statement
         try (PreparedStatement ps = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             //Adds values for ? fields
@@ -103,7 +103,7 @@ public class SocialMediaDAO {
      */
     public Account deleteAccount(Account account) {
         //Catches unexpected errors and returns null
-            String sql = "DELETE FROM account WHERE account_id = ?";
+        String sql = "DELETE FROM account WHERE account_id = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
             ps.setInt(1, account.getAccount_id());
             int deleted = ps.executeUpdate();
@@ -120,10 +120,10 @@ public class SocialMediaDAO {
     //
     public Message insertMessage(Message message) {
         //Catches unexpected errors and returns null
-            //sql string
-            String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?)";
+        //sql string
+        String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?)";
 
-            //creates prepared statement that can return the generated key
+        //creates prepared statement that can return the generated key
         try (PreparedStatement ps = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             //Add values to sql command
@@ -151,10 +151,10 @@ public class SocialMediaDAO {
     }
     public Message selectMessage(int message_id) {
         //Catches unexpected errors and returns null
-            //sql string
-            String sql = "SELECT * FROM message WHERE message_id = ?";
+        //sql string
+        String sql = "SELECT * FROM message WHERE message_id = ?";
 
-            //turns it into a prepared statement
+        //turns it into a prepared statement
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
 
             //Adds value for id
@@ -179,10 +179,10 @@ public class SocialMediaDAO {
     public List<Message> selectAllMessages() {
         List<Message> messages = new ArrayList<>();
         //Catches unexpected errors and returns null
-            //sql statement
-            String sql = "SELECT * FROM message ORDER BY message_id";
+        //sql statement
+        String sql = "SELECT * FROM message ORDER BY message_id";
 
-            //turns it into prepared statment
+        //turns it into prepared statment
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
 
             //Gets reuslts
@@ -206,10 +206,10 @@ public class SocialMediaDAO {
     public List<Message> selectAllMessagesFromAccountId(int account_id) {
         List<Message> messages = new ArrayList<>();
         //Catches unexpected errors and returns null
-            //sql statement
-            String sql = "SELECT * FROM message WHERE posted_by = ? ORDER BY message_id";
+        //sql statement
+        String sql = "SELECT * FROM message WHERE posted_by = ? ORDER BY message_id";
 
-            //turns it into prepared statment
+        //turns it into prepared statment
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
 
             //Adds value for id
@@ -235,16 +235,16 @@ public class SocialMediaDAO {
     }
     public Message deleteMessage(int message_id){
         //Catches unexpected errors and returns null
-            //First checks if message exists from select message if it does we need this to return deleted message
-            Message message = selectMessage(message_id);
-            if(message == null) {
-                return null;
-            }
+        //First checks if message exists from select message if it does we need this to return deleted message
+        Message message = selectMessage(message_id);
+        if(message == null) {
+            return null;
+        }
 
-            //sql statement
-            String sql = "DELETE FROM message WHERE message_id = ?;";
+        //sql statement
+        String sql = "DELETE FROM message WHERE message_id = ?;";
 
-            //turns it into prepared statment
+        //turns it into prepared statment
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
 
             //sets field value
@@ -274,10 +274,10 @@ public class SocialMediaDAO {
      */
     public Message updateMessage(int message_id, String message_text){
         //Catches unexpected errors and returns null
-            //sql statement
-            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
+        //sql statement
+        String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
 
-            //turns statement into prepared statement
+        //turns statement into prepared statement
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
 
             //set field values

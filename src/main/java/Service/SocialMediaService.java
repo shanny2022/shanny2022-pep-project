@@ -53,10 +53,6 @@ public class SocialMediaService {
 
 
     }
-    public SocialMediaService(SocialMediaDAO dao) {
-        this.socialMediaDAO = java.util.Objects.requireNonNull(dao);
-    }
-
     /**
      * Used to add account record to database
      * @param account account object using the constructor without the id as a parameter
