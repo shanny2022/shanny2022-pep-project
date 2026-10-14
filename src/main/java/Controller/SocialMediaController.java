@@ -21,6 +21,8 @@ import io.javalin.http.Context;
  
 public class SocialMediaController {
 
+    private final ObjectMapper mapper = new ObjectMapper();
+
     //Class field for service object for handler functions to reference to
     private SocialMediaService socialMediaService = new SocialMediaService();
 
