@@ -41,4 +41,9 @@ public class ServiceValidationTest {
         assertNull(service.createMessage(new Message(1, "x".repeat(255), 1L)));
         verifyNoInteractions(dao);
     }
+    @Test public void maximumMessageAccepted() {
+        Message message = new Message(1, "x".repeat(254), 1L);
+        when(dao.insertMessage(message)).thenReturn(message);
+        assertSame(message, service.createMessage(message));
+    }
 }
