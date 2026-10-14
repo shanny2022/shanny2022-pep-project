@@ -14,4 +14,8 @@ public class ServiceValidationTest {
         assertNull(service.register(null));
         verifyNoInteractions(dao);
     }
+    @Test public void missingRegistrationFields() {
+        assertNull(service.register(new Account()));
+        verifyNoInteractions(dao);
+    }
 }
