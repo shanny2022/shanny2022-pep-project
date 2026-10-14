@@ -60,6 +60,9 @@ public class SocialMediaService {
      * @return returns account with id value or null if there was an error or account doesn't exist
      */
     public Account login(Account account) {
+        if (account == null || account.getUsername() == null || account.getPassword() == null) {
+            return null;
+        }
         return this.socialMediaDAO.selectAccount(account);
     }
     /**
