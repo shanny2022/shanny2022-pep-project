@@ -7,3 +7,5 @@ restructured_labs/
 .revature/tmp
 .vscode
 .idea/
+.DS_Store
+*.log
