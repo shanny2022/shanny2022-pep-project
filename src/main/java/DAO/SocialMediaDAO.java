@@ -181,7 +181,7 @@ public class SocialMediaDAO {
         List<Message> messages = new ArrayList<>();
         //Catches unexpected errors and returns null
             //sql statement
-            String sql = "SELECT * FROM message";
+            String sql = "SELECT * FROM message ORDER BY message_id";
 
             //turns it into prepared statment
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
