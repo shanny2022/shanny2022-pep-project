@@ -80,7 +80,7 @@ public class SocialMediaService {
         try {
             //Checks message requirements and if it fails returns null
             if(message == null || message.getMessage_text() == null
-                    || message.getMessage_text().length() > 254 || message.getMessage_text().isEmpty()) {
+                    || message.getMessage_text().length() > MAX_MESSAGE_LENGTH || message.getMessage_text().isEmpty()) {
                 return null;
             }
             else {
@@ -142,7 +142,7 @@ public class SocialMediaService {
         try {
             //Checks message requirements and if it fails returns null
             if(message == null || message.getMessage_text() == null
-                    || message.getMessage_text().length() > 254 || message.getMessage_text().isEmpty()) {
+                    || message.getMessage_text().length() > MAX_MESSAGE_LENGTH || message.getMessage_text().isEmpty()) {
                 return null;
             }
             else {
