@@ -32,4 +32,9 @@ public class ServiceValidationTest {
         assertNull(service.login(null));
         verifyNoInteractions(dao);
     }
+    @Test public void missingMessageText() {
+        assertNull(service.createMessage(new Message()));
+        assertNull(service.createMessage(null));
+        verifyNoInteractions(dao);
+    }
 }
