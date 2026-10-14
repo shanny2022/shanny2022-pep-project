@@ -54,7 +54,6 @@ public class SocialMediaController {
     private void registerHandler(Context context) throws JsonMappingException, JsonProcessingException {
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
         //Converts body json to account object
         Account account = mapper.readValue(context.body(), Account.class);
@@ -78,7 +77,6 @@ public class SocialMediaController {
     private void loginHandler(Context context) throws JsonMappingException, JsonProcessingException {
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
         //Converts body json to account object
         Account account = mapper.readValue(context.body(), Account.class);
@@ -100,7 +98,6 @@ public class SocialMediaController {
     private void getMessageHandler(Context context) throws JsonProcessingException{
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
         //Gets id value from endpoint url
         int message_id = Integer.parseInt(context.pathParam("message_id"));
@@ -123,7 +120,6 @@ public class SocialMediaController {
     private void getAllMessagesHandler(Context context) throws JsonProcessingException{
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
         //Returns List of Messages or null on error from service
         List<Message> messages = socialMediaService.readAllMessages();
@@ -144,7 +140,6 @@ public class SocialMediaController {
     private void getMessagesByIdHandler(Context context) throws JsonProcessingException{
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
         //Gets account id from url path
         int account_id = Integer.parseInt(context.pathParam("account_id"));
@@ -168,7 +163,6 @@ public class SocialMediaController {
     private void postMessageHandler(Context context) throws JsonMappingException, JsonProcessingException{
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
         //Converts body json to message object
         Message message = mapper.readValue(context.body(), Message.class);
@@ -191,7 +185,6 @@ public class SocialMediaController {
     private void patchMessageHandler(Context context) throws JsonProcessingException{
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
         //Gets id value from endpoint url
         int message_id = Integer.parseInt(context.pathParam("message_id"));
@@ -219,7 +212,6 @@ public class SocialMediaController {
     private void deleteMessageHandler(Context context) throws JsonProcessingException{
 
         //Uses Jackson object mapper to serialize objects
-        ObjectMapper mapper = new ObjectMapper();
 
 
         //Get message id from url path
