@@ -222,7 +222,7 @@ public class SocialMediaController {
         int message_id = Integer.parseInt(context.pathParam("message_id"));
 
         //sets message object to deleted message or null on failure
-        Message message = socialMediaService.readMessage(message_id);
+        Message message = socialMediaService.deleteMessage(message_id);
 
         //If null return empty body with default response
         if (message == null) {
