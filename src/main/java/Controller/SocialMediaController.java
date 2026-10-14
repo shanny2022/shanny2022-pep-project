@@ -31,6 +31,7 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.exception(JsonProcessingException.class, (exception, context) -> context.status(400));
+        app.exception(NumberFormatException.class, (exception, context) -> context.status(400));
         app.post("/register", this::registerHandler);
         app.post("/login", this::loginHandler);
         app.post("/messages", this::postMessageHandler);
