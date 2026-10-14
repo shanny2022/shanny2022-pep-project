@@ -22,4 +22,9 @@ public class ServiceValidationTest {
         assertNull(service.register(new Account("user", "abc")));
         verifyNoInteractions(dao);
     }
+    @Test public void minimumPasswordAccepted() {
+        Account account = new Account("user", "abcd");
+        when(dao.insertAccount(account)).thenReturn(account);
+        assertSame(account, service.register(account));
+    }
 }
