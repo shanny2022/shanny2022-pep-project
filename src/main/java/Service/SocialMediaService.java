@@ -12,6 +12,9 @@ import Model.*;
  * Could also implement a role base relational table for a list of users that can: view, edit, and delete based on role.
  */
 public class SocialMediaService {
+    private static final int MAX_MESSAGE_LENGTH = 254;
+    private static final int MIN_PASSWORD_LENGTH = 4;
+
     //class field for the data access object
     SocialMediaDAO socialMediaDAO;
 
